@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/toggle-bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/toggle-bootstrap-dark.min.css" />
+  <link rel="stylesheet" href="style.css">
+  <link href='https://fonts.googleapis.com/css?family=Fira Code' rel='stylesheet'>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://d3js.org/topojson.v3.min.js"></script>
+  <script type="text/javascript" src="tooltip.js"></script>
+  <script type="text/javascript" src="maps.js"></script>
+  <script type="text/javascript" src="map.js"></script>
+</head>
+
+<body class="bootstrap" style="font-family: 'Fira Code'; font-size: 16px;">
+  <div class="container">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-9">
+        <h1 style="padding-top: 50px;">Wo sich GA und Halbtax am besten verkaufen</h1>
+        <h4 style="color:  grey; padding-bottom: 20px;">eine Open Data Visualisierung <div style="display: inline-block;" onclick="switch_theme()"><i class="bi bi-moon"></i></div> </h4>
+
+
+        <p>
+        Ziel dieses Artikel ist eine Einsicht in die verkauften Generalabonnement und Halbtax-Abo der SBB zu bekommen. Die Schweiz ist kulturel sehr verschieden, von den 4 Landesprachen zu den 26 Kantonen bis zu den 2148 Gemeinden gibt es eine hohe Fragmentierung in Sprache, Kultur und Verhalten. Auch die schweizer Topologie ändelt keinem anderen Land, wo den Alpen im Süden zu den Jura Gebiergen bietet eigentlich nur das Plateau platz für Grossstädte. All diese Differenzen spiegeln sich in der Nutzung der öffenliche Transportmittel und so auch den Käufen von Transport-Abonnementen. 
+        </p>
+
+        <p>
+          Dieser Artikel ist in folgenden Paragraphen unterteilt:
+        <ol>
+          <li>Wo die meisten GA und Halbtax verkauft werden</li>
+          <li>Wie unterscheiden sich dabei die Kantone</li>
+          <li>Wie hat COVID-19 den Verkauft beeinflusst?</li>
+          <li>Gibt es eine korrelation zwischen GA/Halbtax und Haltestellen?</li>
+        </ol>
+      </p>
+      </div>
+      <div class="col"></div>
+    </div>
+
+
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-9">
+        <b><u>Gemeinde Karte</u></b><br>
+          Teil der neuen Daten Strategie der SBB ist ihre Daten der öffentlichkeit zu verfügung zu stellen, darunter auch ein <a href="https://opendata.swiss/de/dataset/ga-hta-liste/resource/17749535-97e9-4477-ad29-22d957d183e5">Datensatz</a> zu den jährlich verkauften GA und Halbtax. Mit den Bevölkerungsdaten erlaubt das uns die Anzahl Abonnement pro Gemeinde zu finden die auf eine Karte der Schweiz verzeichnet wird:
+      </div>
+      <div class="col"></div>
+    </div>
+
+    <div class="row">
+      <div class="col"></div>
+      <div class="col" style="width:960px">
+        <div id="radio-abo1" class="form-check">
+          <input class="form-check-input" type="radio" name="radio-abo1" onclick="update_map('#map1', 'GA_pro_100')" checked="checked" checked>
+          <label class="form-check-label" for="radio-abo1">
+            Generalabonnement 
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radio-abo1" onclick="update_map('#map1', 'HF_pro_100')">
+          <label class="form-check-label" for="radio-abo1">
+            Halbtax 
+          </label>
+        </div>
+        <div id="map1" ></div>
+      </div>
+      <div class="col"></div>
+    </div>
+
+    <div class="container">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-9">
+          Man erkennt klar den Röstigraben zwischen der Romandie und der Deutschweiz, aber auch den Graben zum Tessin und dem rätoromanischer Teil der Schweiz. Bemerkenswert ist aber auch die Verbindung vom Oberwallis zu Bern der sich durch den Lötschberg-Basistunnel ergibt. 
+      </div>
+      <div class="col"></div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-1"></div>
+      
+      <div class="col" style="width:300px; padding-right: 50px;">
+          <b><u>Kantonale Verteilung</u></b><br>
+          Auch kantonal verdeutlich sich dieses Sprachmsuter sehr, das Tessin bildet das Schlusslicht mit den wenigst verkauft GA und Halbtax. Bern die Hauptstadt der Generalabonnement, fählt aber bei den Halbtax hinter Zürich und überraschenderweise auch hinter Obwalden. Die Hauptstadt der Romandie, Genf, schneidet auch sehr schlecht ab. Wir können annehmen das die meisten Genfer nicht in den Rest der Schweiz reisen aber nach Frankreich. Wir müssen aber präzisieren das wir hich die regional Abonnement in kauf nehmen, so zeigt diese Verteilung eher eine inter-Kantonale Segment der öffendlichen Verkehrsmittel. 
+      </div>
+      <div class="col" id="kanton_plot" style="width:300px"></div>
+      <div class="col-1"></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-9">
+            <b><u>Den zeitlichen Verlauf</u></b><br>
+            Die SBB hat bis 2019 immer von einem stetigen Wachstum in den Anzahl Generalabonnement und Halbtax profitieren können. Jedoch macht die COVID-19 dem ein Strich durch die Rechnung und kostet der SBB <a href="https://company.sbb.ch/de/medien/medienstelle/medienmitteilungen/detail.html/2022/3/1503-1">hunderte million</a> wegen den Verlust and Fahrgästen
+        </div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-9" id="year_plot"></div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-9">
+          Aufällig bei dem folgenden Diagram ist der Verkauf von jährlich Halbtax der sogar in der Pandemie weiter gewachst ist. Aber der verlust an Generalabonnement Verkäufe deteutet darauf hin das es keine neue Kunden sodern Kunden die von einem Generalabonnement zu einem Halbtax gewecheselt haben sind.
+        </div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-9">
+        <b><u>GA/HT pro Haltestelle</u></b><br>
+          Eine der Fragestellung die sich gestellt hat war ob es eine Korrelation zwischen den Anzahl GA/HT und den Anzahl Haltestellen gibt. Städte haben natürlich mehr Haltestellen als das Land aber werden dann die Stops besser unterteilt?
+      </div>
+      <div class="col"></div>
+    </div>
+
+    <div class="row">
+      <div class="col"></div>
+      <div style="width:960px">
+        <div id="radio-abo1" class="form-check">
+          <input class="form-check-input" type="radio" name="radio-abo2" onclick="update_map('#map2', 'GA_pro_stop')" checked="checked" checked>
+          <label class="form-check-label" for="radio-abo2">
+            Generalabonnement 
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radio-abo2" onclick="update_map('#map2', 'HF_pro_stop')">
+          <label class="form-check-label" for="radio-abo2">
+            Halbtax 
+          </label>
+        </div>
+
+        <div id="map2"></div>
+      </div>
+      <div class="col"></div>
+    </div>
+
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-9">
+        Wir sehen das auch wenn Städte mehr Haltestellen haben und generell eine bessere Infrastruktur sieht man trotzdem das die Pendler sich die Infrastruktur in den Städten mehr teilen muss. Das Land verfügt über weniger Haltestellen aber auch deutlich weniger GA/HT-Fahrgäste und so eine weniger grosse Auslastung der Infrastruktur.
+      </div>
+      <div class="col"></div>
+    </div>
+
+    <footer class="row">
+      <div class="col"></div>
+      <div class="col-6"><i>
+        Dieser Artikel ist inspiriert von der <a href="https://www.srf.ch/news/schweiz/pendlerland-schweiz-hier-verkaufen-sich-ga-und-halbtax-am-besten">SRF</a> und folgt den visual Guidelines der <a href="https://nzzdev.github.io/Storytelling-Styleguide/">NZZ</a>.
+        Der Code und ein detailliertes Notebook why die Daten vorarbeitet wurden kann auf <a href="">Github</a> gefunden werden.
+      </i></div>
+      <div class="col"></div>
+    </footer>
+  <script>
+    console.log("Start of script")
+    var gemeinde_data
+    var kanton_data
+    var year_data
+
+    // get the map data
+    get_map_data("ch-combined.json", "GA_HF_pro_gemeinde.csv")
+
+    // plots the per kanton
+    d3.csv("GA_HF_pro_Kanton.csv", function(data) {
+      kanton_data = data
+      initialize_kanton_plot()
+    })
+
+    // load the bar plot
+    d3.csv("GA_HF_pro_year.csv", function(data){
+      year_data = data
+      initialize_year_plot()
+    })
+
+    function switch_theme(){
+      if (document.body.className == "bootstrap"){
+        document.body.className = "bootstrap-dark"
+      } else {
+        document.body.className = "bootstrap"
+      }
+    }
+
+  </script>
+</body>
